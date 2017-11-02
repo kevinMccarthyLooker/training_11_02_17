@@ -1,5 +1,6 @@
 view: distribution_centers {
   sql_table_name: public.distribution_centers ;;
+#   label: "Inventory Item"
 
   dimension: id {
     primary_key: yes
@@ -17,19 +18,17 @@ view: distribution_centers {
     sql: ${TABLE}.longitude ;;
   }
 
+#   dimension: distribution_center_location {
+#     type: location
+#     sql_latitude: ${latitude} ;;
+#     sql_longitude: ${longitude} ;;
+#   }
+
   dimension: name {
+#     label: "Distribution Center Location Name"
+#     description: "Where the inventory item was produced"
     type: string
     sql: ${TABLE}.name ;;
   }
 
-  dimension: distribution_center_location {
-    type: location
-    sql_latitude: ${latitude} ;;
-    sql_longitude: ${longitude} ;;
-  }
-
-  measure: count {
-    type: count
-    drill_fields: [id, name, products.count]
-  }
 }

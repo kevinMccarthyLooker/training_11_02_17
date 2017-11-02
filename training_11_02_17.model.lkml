@@ -13,9 +13,8 @@ explore: inventory_items {
     sql_on: ${inventory_items.product_distribution_center_id} = ${distribution_centers.id} ;;
     relationship: many_to_one
   }
-}
 
-#testing xomments
+}
 
 
 explore: order_items {
@@ -32,4 +31,5 @@ explore: order_items {
     sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
     relationship: many_to_one
   }
+
 }

@@ -13,17 +13,19 @@ view: inventory_items {
   }
 
   dimension: cost {
+#     group_label: "cost fields"
     type: number
     sql: ${TABLE}.cost ;;
     value_format_name: usd
   }
 
-#   dimension: cost_tier {
-#     type: tier
-#     tiers: [10,20,50,100,200]
-#     style: relational
-#     sql: ${cost} ;;
-#   }
+  dimension: cost_tier {
+#     group_label: "cost fields"
+    type: tier
+    tiers: [10,20,50,100,200]
+    style: relational
+    sql: ${cost} ;;
+  }
 
   dimension_group: created {
     type: time
@@ -32,21 +34,23 @@ view: inventory_items {
   }
 
   dimension: product_brand {
-    label: "Brand"
     type: string
     sql: ${TABLE}.product_brand ;;
   }
 
   dimension: product_category {
-    label: "Category"
     type: string
     sql: ${TABLE}.product_category ;;
   }
 
   dimension: product_department {
-    label: "Department"
     type: string
     sql: ${TABLE}.product_department ;;
+  }
+
+  dimension: product_sku {
+    type: string
+    sql: ${TABLE}.product_sku ;;
   }
 
   dimension: product_name {
@@ -56,16 +60,9 @@ view: inventory_items {
   }
 
   dimension: product_retail_price {
-    label: "Retail Price"
     type: number
     sql: ${TABLE}.product_retail_price ;;
   }
-
-  dimension: product_sku {
-    type: string
-    sql: ${TABLE}.product_sku ;;
-  }
-
 
   dimension_group: sold {
     type: time
@@ -75,12 +72,12 @@ view: inventory_items {
 
 #   dimension: is_sold {
 #     type: yesno
-#     sql: ${sold_raw} is not null ;;
+#     sql: ${sold_raw} is not null;;
 #   }
 
   measure: count {
     type: count
-    drill_fields: [id, product_name, products.id, products.name, order_items.count]
+#     drill_fields: [basic_drill_fields_for_inventory_items*]
   }
 
 #   measure: count_sold {
@@ -90,5 +87,19 @@ view: inventory_items {
 #       value: "Yes"
 #     }
 #   }
+
+#   measure: total_cost {
+#     type: sum
+#     sql: ${cost} ;;
+#   }
+
+#   measure: max_cost {
+#     type: max
+#     sql: ${cost} ;;
+#   }
+
+  set: basic_drill_fields_for_inventory_items{
+    fields: [id, product_name, products.id, products.name, order_items.count]
+  }
 
 }
