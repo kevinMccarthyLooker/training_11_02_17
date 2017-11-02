@@ -15,7 +15,15 @@ view: inventory_items {
   dimension: cost {
     type: number
     sql: ${TABLE}.cost ;;
+    value_format_name: usd
   }
+
+#   dimension: cost_tier {
+#     type: tier
+#     tiers: [10,20,50,100,200]
+#     style: relational
+#     sql: ${cost} ;;
+#   }
 
   dimension_group: created {
     type: time
@@ -43,7 +51,8 @@ view: inventory_items {
 
   dimension: product_name {
     type: string
-    sql: ${TABLE}.product_name ;;
+    sql: ${TABLE}.product_name;;
+#     sql: ${TABLE}.product_name || '(' || ${product_sku} ||')';;
   }
 
   dimension: product_retail_price {
@@ -57,14 +66,29 @@ view: inventory_items {
     sql: ${TABLE}.product_sku ;;
   }
 
+
   dimension_group: sold {
     type: time
     timeframes: [raw,date,month,year]
     sql: ${TABLE}.sold_at ;;
   }
 
+#   dimension: is_sold {
+#     type: yesno
+#     sql: ${sold_raw} is not null ;;
+#   }
+
   measure: count {
     type: count
     drill_fields: [id, product_name, products.id, products.name, order_items.count]
   }
+
+#   measure: count_sold {
+#     type: count
+#     filters: {
+#       field: is_sold
+#       value: "Yes"
+#     }
+#   }
+
 }
