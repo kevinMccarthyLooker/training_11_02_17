@@ -15,6 +15,8 @@ explore: inventory_items {
   }
 }
 
+#testing xomments
+
 
 explore: order_items {
   #To Do: Add distribution_centers join to this explore
