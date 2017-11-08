@@ -14,7 +14,19 @@ explore: inventory_items {
     relationship: many_to_one
   }
 
+  join: brand_facts {
+    type: inner
+    sql_on: ${brand_facts.inventory_items_product_brand}=${inventory_items.product_brand} ;;
+    relationship: many_to_one
+
+
+  }
+
 }
+
+
+
+
 
 
 explore: order_items {

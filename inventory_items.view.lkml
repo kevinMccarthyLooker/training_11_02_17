@@ -55,48 +55,68 @@ view: inventory_items {
 
   dimension: product_name {
     type: string
-    sql: ${TABLE}.product_name;;
-#     sql: ${TABLE}.product_name || '(' || ${product_sku} ||')';;
+#     sql: ${TABLE}.product_name;;
+    sql: ${TABLE}.product_name || '(' || ${product_sku} ||')';;
   }
 
   dimension: product_retail_price {
     type: number
     sql: ${TABLE}.product_retail_price ;;
+    value_format_name: usd_0
   }
+
+  dimension: product_retail_price_tier {
+    type: tier
+    tiers: [10,20,50,100]
+    style: integer
+    sql: ${product_retail_price} ;;
+  }
+
+#   dimension: product_retail_price_tier_manual {
+#     type: string
+#     sql:
+#     case when ${product_retail_price} <10 then 'less than ten'
+#     else '10 or more'
+#     end
+#     ;;
+#   }
+
 
   dimension_group: sold {
     type: time
-    timeframes: [raw,date,month,year]
+    timeframes: [raw,date,month,quarter,week_of_year,year]
     sql: ${TABLE}.sold_at ;;
   }
 
-#   dimension: is_sold {
-#     type: yesno
-#     sql: ${sold_raw} is not null;;
-#   }
+  dimension: is_sold {
+    type: yesno
+    sql: ${sold_raw} is not null;;
+  }
 
   measure: count {
     type: count
 #     drill_fields: [basic_drill_fields_for_inventory_items*]
   }
 
-#   measure: count_sold {
-#     type: count
-#     filters: {
-#       field: is_sold
-#       value: "Yes"
-#     }
-#   }
+  measure: count_sold {
+    type: count
+    filters: {
+      field: is_sold
+      value: "Yes"
+    }
+  }
 
 #   measure: total_cost {
 #     type: sum
 #     sql: ${cost} ;;
 #   }
 
-#   measure: max_cost {
-#     type: max
-#     sql: ${cost} ;;
-#   }
+  measure: max_cost {
+    type: max
+    sql: ${cost} ;;
+  }
+
+
 
   set: basic_drill_fields_for_inventory_items{
     fields: [id, product_name, products.id, products.name, order_items.count]

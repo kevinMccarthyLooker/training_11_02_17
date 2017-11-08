@@ -20,6 +20,11 @@ view: users {
     sql: ${TABLE}.first_name;;
   }
 
+  dimension: first_name_lowercase {
+    type: string
+    sql: lower(${first_name}) ;;
+  }
+
   dimension: last_name {
     type: string
     sql: ${TABLE}.last_name ;;
@@ -104,6 +109,22 @@ view: users {
   measure: count {
     type: count
     drill_fields: [id, first_name, last_name, events.count, order_items.count]
+  }
+
+  measure: average_age {
+    type: average
+    sql: ${age} ;;
+  }
+  dimension: is_domestic {
+    type: yesno
+    sql: ${country}='USA' ;;
+  }
+  measure: count_domestic_users {
+    type: count
+    filters: {
+      field: is_domestic
+      value: "Yes"
+    }
   }
 
 }
